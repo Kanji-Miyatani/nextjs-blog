@@ -1,6 +1,17 @@
 import Head from 'next/head'
+import Link from 'next/link'
+import utilStyles from '../styles/util.module.css'
+import { getSortedPostsData } from '../lib/posts';
 
-export default function Home() {
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData();
+  return {
+    props: {
+      allPostsData,
+    },
+  };
+}
+export default function Home({ allPostsData }) {
   return (
     <div className="container">
       <Head>
@@ -10,13 +21,25 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a >Next.js!</a>
         </h1>
 
         <p className="description">
           Get started by editing <code>pages/index.js</code>
         </p>
-
+        <ul className={utilStyles.list}>
+          {allPostsData.map(({ id, date, title }) => (
+            <li className={utilStyles.listItem} key={id}>
+              {title}
+              <br />
+              {id}
+              <br />
+              {date}
+              <br />
+              <Link href={`posts/${id}`}>Link</Link>
+            </li>
+          ))}
+        </ul>
         <div className="grid">
           <a href="https://nextjs.org/docs" className="card">
             <h3>Documentation &rarr;</h3>
